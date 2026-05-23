@@ -1,0 +1,75 @@
+# Default/user-overridable aspect computation rules.
+#
+# This config is designed for fine-grain end-user control:
+# - which aspects are enabled
+# - base orbs per aspect kind
+# - endpoint-specific orb overrides (e.g. widen Sun/Moon, tighten Pluto)
+# - include/exclude filters per endpoint
+#
+# Aspect kinds use stable canonical keys. Legacy Rust variant names like "Trine"
+# are accepted for migration, but new configs should prefer keys like "trine".
+
+# If present, `aspects` acts as the allow-list for aspect kinds.
+# Each entry sets the base orb (in degrees) before endpoint overrides are applied.
+[[aspects]]
+kind = "conjunction"
+enabled = true
+orb_deg = 8.0
+
+[[aspects]]
+kind = "sextile"
+enabled = true
+orb_deg = 4.0
+
+[[aspects]]
+kind = "square"
+enabled = true
+orb_deg = 6.0
+
+[[aspects]]
+kind = "trine"
+enabled = true
+orb_deg = 6.0
+
+[[aspects]]
+kind = "opposition"
+enabled = true
+orb_deg = 8.0
+
+# How to combine endpoint-specific overrides for a pair.
+#
+# - "max": common policy where a luminary widens the orb.
+# - "min": strict policy where the tighter endpoint controls the orb.
+# - "mean": in-between.
+orb_combine = "max"
+
+# Endpoint keys use `Occupant::canonical_key()` values.
+# Common examples:
+# - bodies: "sun", "moon", "mercury", ... "pluto"
+# - angles: "ascendant", "midheaven", ...
+# - chart points: see `ChartPoint::canonical_key()`
+# - lots: see `Lot::canonical_key()`
+
+# Widen all Sun aspects.
+[[orb_overrides]]
+endpoint = "sun"
+orb_deg = 10.0
+
+# Make Sun conjunctions even wider.
+[[orb_overrides]]
+endpoint = "sun"
+kind = "conjunction"
+orb_deg = 12.0
+
+# Tighten Pluto aspects.
+[[orb_overrides]]
+endpoint = "pluto"
+orb_deg = 2.0
+
+# Optional endpoint include/exclude filters.
+#
+# If `include_endpoints` is non-empty, only endpoints listed here will be considered.
+# include_endpoints = ["sun", "moon", "ascendant"]
+#
+# Exclusions always win.
+# exclude_endpoints = ["mean_apog"]

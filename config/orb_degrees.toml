@@ -1,0 +1,34 @@
+# Orb constants used to generate Rust `pub const` values at build time.
+#
+# Notes:
+# - Keys are the *exact* Rust constant names that will be generated.
+# - This file is intentionally focused on orbs, which are expected to be more
+#   changeable than the underlying aspect degrees.
+
+[orb_degrees]
+# Default orb baselines
+CONJUNCTION_ORB_DEGREES_WITH_SUN_OR_MOON = 10.0
+CONJUNCTION_ORB_DEGREES_WITHOUT_SUN_OR_MOON = 8.0
+
+# If a planet is in very close conjunction to the Sun (within 17 minutes of arc
+# or about 0.28°), the conjunction is of great strength (Cazimi).
+CAZIMI_ORB_DEGREES = 0.28
+
+# TODO: in the future this likely needs body-specific handling.
+COMBUST_ORB_DEGREES = 0.28
+
+SEMISEXTILE_ORB_DEGREES = 1.2
+UNDECILE_ORB_DEGREES = 1.0
+NOVILE_ORB_DEGREES = 1.0
+SEPTILE_ORB_DEGREES = 1.0
+SEXTILE_ORB_DEGREES = 5.0
+SQUARE_ORB_DEGREES = 10.0
+TRINE_ORB_DEGREES = 10.0
+SESQUIQUADRATE_ORB_DEGREES = 1.5
+QUINCUNX_ORB_DEGREES = 3.5
+OPPOSITION_ORB_DEGREES = 10.0
+OCTILE_ORB_DEGREES = 3.0
+
+# Fallback used when an aspect kind has no explicit orb configured.
+DEFAULT_ORB_DEGREES = 2.5
+

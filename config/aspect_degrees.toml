@@ -1,0 +1,34 @@
+# Aspect degree constants used to generate Rust `pub const` values at build time.
+#
+# Notes:
+# - Keys are the *exact* Rust constant names that will be generated.
+# - This file is intentionally focused on aspect degrees, which are expected
+#   to be relatively stable over time.
+
+[aspect_degrees]
+CONJUNCTION_DEGREES = 0.0
+VIGINTILE_DEGREES = 18.0
+SEMISEXTILE_DEGREES = 30.0
+UNDECILE_DEGREES = 32.73
+DECILE_DEGREES = 36.0
+NOVILE_DEGREES = 40.0
+SEMISQUARE_DEGREES = 45.0
+SEPTILE_DEGREES = 51.43
+SEXTILE_DEGREES = 60.0
+QUINTILE_DEGREES = 72.0
+BINOVILE_DEGREES = 80.0
+SQUARE_DEGREES = 90.0
+BISEPTILE_DEGREES = 102.86
+TREDECILE_DEGREES = 108.0
+TRINE_DEGREES = 120.0
+SESQUIQUADRATE_DEGREES = 135.0
+BIQUINTILE_DEGREES = 144.0
+QUINCUNX_DEGREES = 150.0
+TRISEPTILE_DEGREES = 154.29
+QUADRANOVILE_DEGREES = 160.0
+OPPOSITION_DEGREES = 180.0
+
+# Eclipse-related constants
+OCCULTATION_DEGREES = 0.0
+LUNAR_ECLIPSE_DEGREES = 180.0
+
