@@ -77,6 +77,17 @@ impl SignDegree {
         Self::new_const(degrees)
     }
 
+    pub fn rotated_by_degrees(&self, offset_degrees: f64) -> Self {
+        let mut degrees = (self.degrees + offset_degrees) % 360.0;
+        if degrees < 0.0 {
+            degrees += 360.0;
+        }
+        if degrees >= 360.0 {
+            degrees -= 360.0;
+        }
+        Self::new(degrees)
+    }
+
     //    pub fn from_f64(d: f64) -> Self {
     //        Self::new(d)
     //    }

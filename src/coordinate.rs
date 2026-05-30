@@ -12,6 +12,25 @@ pub enum Coordinate {
 }
 
 impl Coordinate {
+    pub fn rotated_by_degrees(&self, offset_degrees: f64) -> Self {
+        match self {
+            Coordinate::Sign(sign) => Coordinate::Sign(*sign),
+            Coordinate::SignDegree(sign_degree) => {
+                Coordinate::SignDegree(sign_degree.rotated_by_degrees(offset_degrees))
+            }
+            Coordinate::House(house) => Coordinate::House(*house),
+            Coordinate::SignHouse(sign_house) => Coordinate::SignHouse(*sign_house),
+            Coordinate::HouseSignDegree(house_sign_degree) => {
+                Coordinate::HouseSignDegree(HouseSignDegree::new(
+                    house_sign_degree.house,
+                    house_sign_degree
+                        .sign_degree
+                        .rotated_by_degrees(offset_degrees),
+                ))
+            }
+        }
+    }
+
     pub fn sign(&self) -> Option<Sign> {
         match self {
             Coordinate::Sign(sign) => Some(*sign),

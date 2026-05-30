@@ -16,6 +16,13 @@ impl Placement {
         }
     }
 
+    pub fn rotated_by_degrees(&self, offset_degrees: f64) -> Self {
+        Self {
+            coordinate: self.coordinate.rotated_by_degrees(offset_degrees),
+            occupant: self.occupant,
+        }
+    }
+
     pub fn house(&self) -> Option<House> {
         self.coordinate.house()
     }
@@ -41,6 +48,13 @@ pub struct PlacementMotion {
 impl PlacementMotion {
     pub fn new(placement: Placement, motion: Motion) -> Self {
         Self { placement, motion }
+    }
+
+    pub fn rotated_by_degrees(&self, offset_degrees: f64) -> Self {
+        Self {
+            placement: self.placement.rotated_by_degrees(offset_degrees),
+            motion: self.motion,
+        }
     }
 
     pub fn is_retrograde(&self) -> bool {
