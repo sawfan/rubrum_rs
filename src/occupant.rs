@@ -2,6 +2,21 @@ use super::*;
 
 use serde::{Deserialize, Serialize};
 
+#[derive(Debug, Clone, PartialEq, Eq, Copy, Hash, Serialize, Deserialize)]
+pub enum OccupantFormat {
+    /// Stable storage/API key such as `"mars"` or `"ascendant"`.
+    Key,
+
+    /// Human-readable English name such as `"Mars"` or `"Ascendant"`.
+    Name,
+
+    /// Astrological glyph/short label such as `"♂"`, falling back to `Name` when unavailable.
+    Symbol,
+
+    /// Rust enum variant name such as `"Body(Mars)"`; useful for debugging/config migration.
+    Debug,
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub enum Occupant {
     Empty,
@@ -33,6 +48,41 @@ impl Occupant {
             _ => None,
         }
     }
+
+    /// Returns a human-readable name for this occupant.
+    ///
+    /// This intentionally differs from `Display`, which remains symbol-oriented
+    /// for historical compatibility with glyph-heavy chart rendering.
+    pub fn name(&self) -> &'static str {
+        match self {
+            Occupant::Empty => "",
+            Occupant::Body(body) => body.name(),
+            Occupant::ChartPoint(chart_point) => chart_point.name(),
+            Occupant::Angle(angle) => angle.name(),
+            Occupant::Lot(lot) => lot.name(),
+        }
+    }
+
+    /// Returns the configured astrological glyph/short-label representation.
+    pub fn symbol_text(&self) -> String {
+        match self {
+            Occupant::Empty => String::new(),
+            Occupant::Body(body) => body.symbol_text(),
+            Occupant::ChartPoint(chart_point) => chart_point.symbol_text(),
+            Occupant::Angle(angle) => angle.symbol_text(),
+            Occupant::Lot(lot) => lot.symbol_text(),
+        }
+    }
+
+    /// Formats this occupant for a requested presentation surface.
+    pub fn format_occupant(&self, fmt: OccupantFormat) -> String {
+        match fmt {
+            OccupantFormat::Key => self.canonical_key().to_owned(),
+            OccupantFormat::Name => self.name().to_owned(),
+            OccupantFormat::Symbol => self.symbol_text(),
+            OccupantFormat::Debug => format!("{:?}", self),
+        }
+    }
 }
 
 #[cfg(test)]
@@ -51,5 +101,18 @@ mod tests {
             Occupant::ChartPoint(ChartPoint::MeanApog).canonical_key(),
             "mean_apog"
         );
+    }
+
+    #[test]
+    fn format_occupant_supports_names_and_symbols() {
+        let mars = Occupant::Body(Body::Mars);
+        assert_eq!(mars.format_occupant(OccupantFormat::Key), "mars");
+        assert_eq!(mars.format_occupant(OccupantFormat::Name), "Mars");
+        assert_eq!(mars.format_occupant(OccupantFormat::Symbol), "♂");
+        assert_eq!(mars.format_occupant(OccupantFormat::Debug), "Body(Mars)");
+
+        let asc = Occupant::Angle(Angle::Ascendant);
+        assert_eq!(asc.format_occupant(OccupantFormat::Name), "Ascendant");
+        assert_eq!(asc.format_occupant(OccupantFormat::Symbol), "Asc");
     }
 }
