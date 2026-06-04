@@ -34,6 +34,12 @@ pub enum ChartPoint {
     /// True lunar node.
     TrueNode,
 
+    /// Mean south lunar node.
+    MeanSouthNode,
+
+    /// True south lunar node.
+    TrueSouthNode,
+
     /// Mean lunar apogee ("Black Moon" / Lilith in some contexts).
     MeanApog,
 
@@ -105,6 +111,8 @@ impl ChartPoint {
             ChartPoint::EclNut => "ecl_nut",
             ChartPoint::MeanNode => "mean_node",
             ChartPoint::TrueNode => "true_node",
+            ChartPoint::MeanSouthNode => "mean_south_node",
+            ChartPoint::TrueSouthNode => "true_south_node",
             ChartPoint::MeanApog => "mean_apog",
             ChartPoint::OscuApog => "oscu_apog",
             ChartPoint::IntpApog => "intp_apog",
@@ -117,6 +125,8 @@ impl ChartPoint {
             "ecl_nut" => Some(ChartPoint::EclNut),
             "mean_node" => Some(ChartPoint::MeanNode),
             "true_node" => Some(ChartPoint::TrueNode),
+            "mean_south_node" | "mean_southnode" => Some(ChartPoint::MeanSouthNode),
+            "true_south_node" | "true_southnode" => Some(ChartPoint::TrueSouthNode),
             "mean_apog" => Some(ChartPoint::MeanApog),
             "oscu_apog" => Some(ChartPoint::OscuApog),
             "intp_apog" => Some(ChartPoint::IntpApog),
@@ -130,6 +140,8 @@ impl ChartPoint {
             ChartPoint::EclNut => "Ecliptic Nutation",
             ChartPoint::MeanNode => "Mean Node",
             ChartPoint::TrueNode => "True Node",
+            ChartPoint::MeanSouthNode => "Mean South Node",
+            ChartPoint::TrueSouthNode => "True South Node",
             ChartPoint::MeanApog => "Mean Apogee",
             ChartPoint::OscuApog => "Osculating Apogee",
             ChartPoint::IntpApog => "Interpolated Apogee",

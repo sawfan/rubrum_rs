@@ -2,6 +2,8 @@
 EclNut = "Nut"
 MeanNode = "☊"
 TrueNode = "☊"
+MeanSouthNode = "☋"
+TrueSouthNode = "☋"
 MeanApog = "⚸"
 OscuApog = "⚸"
 IntpApog = "⚸"
