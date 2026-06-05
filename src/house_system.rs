@@ -9,6 +9,8 @@ use serde::{Deserialize, Serialize};
 pub enum HouseSystem {
     #[default]
     Placidus,
+    /// Do not compute or render houses/angles. Useful when birth time is unknown.
+    None,
     Koch,
     Porphyry,
     Regiomontanus,
@@ -25,6 +27,7 @@ impl HouseSystem {
     pub fn label(self) -> &'static str {
         match self {
             Self::Placidus => "Placidus",
+            Self::None => "No houses",
             Self::Koch => "Koch",
             Self::Porphyry => "Porphyry",
             Self::Regiomontanus => "Regiomontanus",
@@ -41,6 +44,7 @@ impl HouseSystem {
     pub fn as_slug(self) -> &'static str {
         match self {
             Self::Placidus => "placidus",
+            Self::None => "none",
             Self::Koch => "koch",
             Self::Porphyry => "porphyry",
             Self::Regiomontanus => "regiomontanus",
@@ -57,6 +61,7 @@ impl HouseSystem {
     pub fn parse_slug(s: &str) -> Option<Self> {
         match s.trim().to_ascii_lowercase().as_str() {
             "placidus" | "p" => Some(Self::Placidus),
+            "none" | "no-houses" | "no_houses" | "nohouses" | "off" => Some(Self::None),
             "koch" | "k" => Some(Self::Koch),
             "porphyry" | "porphyrius" | "o" => Some(Self::Porphyry),
             "regiomontanus" | "regio" | "r" => Some(Self::Regiomontanus),
@@ -74,6 +79,7 @@ impl HouseSystem {
     pub fn all() -> &'static [Self] {
         &[
             Self::Placidus,
+            Self::None,
             Self::Koch,
             Self::Porphyry,
             Self::Regiomontanus,
