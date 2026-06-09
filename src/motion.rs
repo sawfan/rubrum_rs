@@ -1,10 +1,124 @@
 use serde::{Deserialize, Serialize};
 
-use crate::ParseKeyError;
+use crate::{Body, Occupant, ParseKeyError};
 
 use strum_macros::Display;
 use strum_macros::EnumIter;
 use strum_macros::IntoStaticStr;
+
+/// Describes whether an occupant can meaningfully have apparent retrograde motion.
+///
+/// This is intentionally a semantic capability, not a momentary motion state.
+/// For example, Mars is `Retrogradeable` even when it is currently direct, while
+/// the Sun and Moon are `AlwaysDirect` for the geocentric chart use-cases this
+/// crate models.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum ApparentMotionCapability {
+    /// The placement is not expected to station or enter apparent retrograde motion.
+    #[default]
+    AlwaysDirect,
+
+    /// The placement may station and alternate between direct and retrograde motion.
+    Retrogradeable,
+}
+
+impl ApparentMotionCapability {
+    #[inline]
+    pub const fn canonical_key(self) -> &'static str {
+        match self {
+            Self::AlwaysDirect => "always_direct",
+            Self::Retrogradeable => "retrogradeable",
+        }
+    }
+
+    #[inline]
+    pub const fn name(self) -> &'static str {
+        match self {
+            Self::AlwaysDirect => "Always direct",
+            Self::Retrogradeable => "Retrogradeable",
+        }
+    }
+
+    #[inline]
+    pub const fn can_station_retrograde(self) -> bool {
+        matches!(self, Self::Retrogradeable)
+    }
+}
+
+impl Body {
+    /// Returns whether this body can station and appear retrograde in the chart model.
+    #[inline]
+    pub const fn apparent_motion_capability(self) -> ApparentMotionCapability {
+        match self {
+            Body::Sun | Body::Moon | Body::Earth => ApparentMotionCapability::AlwaysDirect,
+            Body::Mercury
+            | Body::Venus
+            | Body::Mars
+            | Body::Jupiter
+            | Body::Saturn
+            | Body::Uranus
+            | Body::Neptune
+            | Body::Pluto
+            | Body::Chiron
+            | Body::Pholus
+            | Body::Ceres
+            | Body::Pallas
+            | Body::Juno
+            | Body::Vesta
+            | Body::Astraea
+            | Body::Hebe
+            | Body::Iris
+            | Body::Flora
+            | Body::Metis
+            | Body::Hygiea
+            | Body::Urania
+            | Body::IsisAstroid
+            | Body::Hilda
+            | Body::Philosophia
+            | Body::Sophia
+            | Body::Aletheia
+            | Body::Sapientia
+            | Body::Thule
+            | Body::Ursula
+            | Body::Eros
+            | Body::CupidoAstroid
+            | Body::Hidalgo
+            | Body::Amor
+            | Body::Kama
+            | Body::Aphrodite
+            | Body::Apollo
+            | Body::Damocles
+            | Body::Cruithne
+            | Body::PoseidonAstroid
+            | Body::Vulcano
+            | Body::ZeusAstroid
+            | Body::Nessus => ApparentMotionCapability::Retrogradeable,
+        }
+    }
+
+    #[inline]
+    pub const fn can_station_retrograde(self) -> bool {
+        self.apparent_motion_capability().can_station_retrograde()
+    }
+}
+
+impl Occupant {
+    /// Returns whether this occupant can station and appear retrograde in the chart model.
+    #[inline]
+    pub const fn apparent_motion_capability(self) -> ApparentMotionCapability {
+        match self {
+            Occupant::Body(body) => body.apparent_motion_capability(),
+            Occupant::Empty | Occupant::ChartPoint(_) | Occupant::Angle(_) | Occupant::Lot(_) => {
+                ApparentMotionCapability::AlwaysDirect
+            }
+        }
+    }
+
+    #[inline]
+    pub const fn can_station_retrograde(self) -> bool {
+        self.apparent_motion_capability().can_station_retrograde()
+    }
+}
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum MotionFormat {
