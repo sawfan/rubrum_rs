@@ -152,16 +152,16 @@ mod tests {
 
     #[test]
     fn max_less_than_constants_are_previous_representable_f64s() {
-        assert!(MAX_LESS_THAN_1 < 1.0);
+        const { assert!(MAX_LESS_THAN_1 < 1.0) };
         assert_eq!(MAX_LESS_THAN_1.to_bits() + 1, 1.0f64.to_bits());
 
-        assert!(MAX_LESS_THAN_30 < 30.0);
+        const { assert!(MAX_LESS_THAN_30 < 30.0) };
         assert_eq!(MAX_LESS_THAN_30.to_bits() + 1, 30.0f64.to_bits());
 
-        assert!(MAX_LESS_THAN_60 < 60.0);
+        const { assert!(MAX_LESS_THAN_60 < 60.0) };
         assert_eq!(MAX_LESS_THAN_60.to_bits() + 1, 60.0f64.to_bits());
 
-        assert!(MAX_LESS_THAN_360 < 360.0);
+        const { assert!(MAX_LESS_THAN_360 < 360.0) };
         assert_eq!(MAX_LESS_THAN_360.to_bits() + 1, 360.0f64.to_bits());
     }
 }
